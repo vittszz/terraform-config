@@ -1,36 +1,29 @@
 terraform {
+  required_version = "1.7.3"
+
   required_providers {
-    port = {
-      source  = "port-labs/port-labs"
-      version = "~> 1.0.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "3.44.0"
     }
   }
+
+  backend "s3" {
+    region = "us-east-2"
+  }
+
 }
 
-provider "port" {
-  client_id = "{YOUR CLIENT ID}"  
-  secret    = "{YOUR CLIENT SECRET}" 
-}
+provider "aws" {
+  region  = "us-east-2"
+ 
 
-resource "port_entity" "myEntity" {
-  identifier = "myEntity" # Entity identifier
-  title      = "My Entity" # Entity title
-  blueprint  = "myBlueprint" # Identifier of the blueprint to create this entity from
-
-  properties = {
-    string_props = {
-      "myStringProp" = "My string"
-      }
-
-    number_props = {
-      "myNumberProp" = 7
-      }
-
-    array_props = {
-      string_items = {
-        "myArrayProp" = ["a", "b", "c"]
-        }
-      }
-}
-  
+  default_tags {
+    tags = {
+      Project   = "Terraform GHA setup"
+      CreatedAt = "2024-15-02"
+      ManagedBy = "Terraform"
+      Owner     = "João Victor"
+    }
+  }
 }
