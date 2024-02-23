@@ -1,9 +1,10 @@
 name: 'Terraform'
+
 on:
   push:
     branches: [main]
   pull_request:
-  
+
 permissions:
   contents: read
 
@@ -41,8 +42,10 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -input=false
 
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+    # On push to "main", build or change infrastructure according to Terraform configuration files
+    # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        terraform apply -auto-approve -input=false
+        echo "TF_OUTPUT_VAR=$(terraform output -raw your_output_variable)" >> $GITHUB_ENV
