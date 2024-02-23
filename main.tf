@@ -1,36 +1,18 @@
-terraform {
-  required_providers {
-    port = {
-      source  = "port-labs/port-labs"
-      version = "~> 1.0.0"
-    }
+provider "aws" {
+    region = "us-east-2"  
+}
+
+resource "aws_s3_bucket" "my-test-bucket" {
+  bucket = "my-tf-test-bucket-1234321234"
+  acl  = "private"
+
+  tags = {
+    Name      = "My bucket"
+    Environment = "Development"
+    managedby =  "terraform"
   }
 }
-
-provider "port" {
-  client_id = "{YOUR CLIENT ID}"  
-  secret    = "{YOUR CLIENT SECRET}" 
-}
-
-resource "port_entity" "myEntity" {
-  identifier = "myEntity" # Entity identifier
-  title      = "My Entity" # Entity title
-  blueprint  = "myBlueprint" # Identifier of the blueprint to create this entity from
-
-  properties = {
-    string_props = {
-      "myStringProp" = "My string"
-      }
-
-    number_props = {
-      "myNumberProp" = 7
-      }
-
-    array_props = {
-      string_items = {
-        "myArrayProp" = ["a", "b", "c"]
-        }
-      }
-}
-  
+output "bucket_fqdn" {
+    value = aws_s3_bucket.my-test-bucket
+    description = "fqdn of bucket"
 }
